@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        #app {
+            background-color: antiquewhite;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #chart-container {
+            position: relative;
+            background-color: aquamarine;
+            height: 50vh;
+            width: 80%;
+        }
+
+        .bar {
+            color: #fff;
+            text-align: center;
+            position: relative;
+            height: 15px;
+            background-color: #a85a5a;
+            margin: 20px 0;
+            border-radius: 15px;
+        }
+
+        .current {
+            position: absolute;
+            border-radius: 15px;
+            width: 30%;
+            background-color: #a52a2a;
+            height: 100%;
+        }
+
+        .indicator {
+            position: absolute;
+            border-right: 1px solid red;
+            height: 100%;
+        }
+
+        .duration {
+            z-index: 10;
+            position: relative;
+        }
+
+        .title {
+            display: block;
+            position: absolute;
+            top: -18px;
+            color: #333;
+            font-size: 80%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div id="chart-container">
+            <div class="indicator"></div>
+            <div class="bar">
+                <span class="title">Deboarding</span>
+                <div class="current"></div>
+                <span class="duration"></span>
+            </div>
+            <div class="bar">
+                <span class="title">Refueling</span>
+                <div class="current"></div>
+                <span class="duration"></span>
+            </div>
+            <div class="bar">
+                <span class="title">Catering</span>
+                <div class="current"></div>
+                <span class="duration"></span>
+            </div>
+        </div>
+    </div>
+    <script>
+        let bar = document.querySelectorAll('.bar');
+        let duration = document.querySelectorAll('.duration');
+        let indicator = document.querySelector('.indicator');
+
+        let activity1 = {
+            start: new Date().getTime(),
+            end: new Date().getTime() + 1000 * 60 * 10,
+        };
+
+        let activity2 = {
+            start: new Date().getTime() + 1000 * 60 * 10,
+            end: new Date().getTime() + 1000 * 60 * 40,
+        };
+        let activity3 = {
+            start: new Date().getTime() + 1000 * 60 * 30,
+            end: new Date().getTime() + 1000 * 60 * 50,
+        };
+
+        let full = activity3.end - activity1.start;
+
+        let duration1 = activity1.end - activity1.start;
+        let duration2 = activity2.end - activity2.start;
+        let duration3 = activity3.end - activity3.start;
+
+        let offset2 = activity2.start - activity1.start;
+        let offset2width = offset2 / full;
+
+        let offset3 = activity3.start - activity1.start;
+        let offset3width = offset3 / full;
+
+        let width1 = duration1 / full;
+        let width2 = duration2 / full;
+        let width3 = duration3 / full;
+        bar[0].style.width = `${width1 * 100}%`;
+        bar[1].style.width = `${width2 * 100}%`;
+        bar[1].style.left = `${offset2width * 100}%`;
+        bar[2].style.width = `${width3 * 100}%`;
+        bar[2].style.left = `${offset3width * 100}%`;
+
+        duration[0].innerText = `${new Date(duration1).getMinutes()}'`;
+        duration[1].innerText = `${new Date(duration2).getMinutes()}'`;
+        duration[2].innerText = `${new Date(duration3).getMinutes()}'`;
+
+        setInterval(function () {
+            let now = new Date().getTime();
+            let offset = now - activity1.start;
+            let width = offset / full;
+            indicator.style.width = `${width * 100}%`;
+        }, 1000);
+
+    </script>
+</body>
+
+</html>
